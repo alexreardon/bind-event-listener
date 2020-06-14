@@ -1,6 +1,7 @@
 {
   "name": "@dom-events/bind",
   "version": "0.1.0",
+  "private": false,
   "description": "Making binding and unbinding DOM events easier",
   "main": "dist/index.js",
   "author": "Alex Reardon <alexreardon@gmail.com>",
