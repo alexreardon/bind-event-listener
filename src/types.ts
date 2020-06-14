@@ -3,6 +3,6 @@ export type UnbindFn = () => void;
 export type Binding = {
   target: Element;
   type: string;
-  handler: EventListenerOrEventListenerObject;
+  listener: EventListenerOrEventListenerObject;
   options?: boolean | AddEventListenerOptions;
 };

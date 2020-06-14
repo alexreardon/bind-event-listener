@@ -8,7 +8,7 @@ it('should bind a listener', () => {
   bind({
     target: button,
     type: 'click',
-    handler: onClick,
+    listener: onClick,
   });
 
   button.click();
@@ -23,7 +23,7 @@ it('should unbind a listener', () => {
   const unbind: UnbindFn = bind({
     target: button,
     type: 'click',
-    handler: onClick,
+    listener: onClick,
   });
 
   button.click();

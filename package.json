@@ -1,5 +1,5 @@
 {
-  "name": "@dom-events/bind",
+  "name": "bind-event-listener",
   "version": "0.1.0",
   "private": false,
   "description": "Making binding and unbinding DOM events easier",

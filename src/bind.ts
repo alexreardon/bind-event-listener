@@ -1,6 +1,6 @@
 import { UnbindFn, Binding } from './types';
 
-export function bind({ target, type, handler, options }: Binding): UnbindFn {
+export function bind({ target, type, listener: handler, options }: Binding): UnbindFn {
   target.addEventListener(type, handler, options);
 
   return function unbind() {
