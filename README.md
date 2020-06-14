@@ -1,6 +1,39 @@
 # bind-event-listener
 
-> A utility to make using `addEventListener` easier.
+> A utility to make using `addEventListener` easier. I seem to write this again with every new project, so I made it a library
+
+```ts
+import { bind } from 'bind-event-listener';
+
+const unbind = bind(button, {
+  type: 'click',
+  listener: onClick,
+});
+
+// when your are all done:
+unbind();
+```
+
+```ts
+import { bindAll } from 'bind-event-listener';
+
+const unbind = bind(button, [
+  {
+    type: 'click',
+    listener: onClick,
+    options: { capture: true },
+  },
+  {
+    type: 'mouseover',
+    listener: onMouseOver,
+  },
+]);
+
+// when your are all done:
+unbind();
+```
+
+## Rationale
 
 When using `addEventListener()` you need to remember to manually call `removeEventListener()` correctly in order to unbind the event.
 
@@ -11,72 +44,131 @@ target.addEventListener('click', onClick, options);
 target.removeEventListener('click', onClick, options);
 ```
 
-## Rationale
+You need to pass in the same listener _reference_ (`onClick`), otherwise the original function will not unbind.
 
-Pitfalls with manually removing the event listener:
+```ts
+target.addEventListener(
+  'click',
+  function onClick() {
+    console.log('clicked');
+  },
+  options,
+);
 
-1. You need to pass in the same listener _reference_ (`onClick`), otherwise the original function will not unbind.
+// This will not unbind as you have not passed in the same 'onClick' function reference
+target.removeEventListener(
+  'click',
+  function onClick() {
+    console.log('clicked');
+  },
+  options,
+);
+```
 
-This means you can also never unbind listeners that are arrow functions `addEventListener('click', () => console.log('I can never be unbound'))`
+This means you can also never unbind listeners that are arrow functions
 
-2. You need to remember to pass in the same _value_ for the third argument to `addEventListener`: (`boolean | AddEventListenerOption`) or the event will not be unbound
+```ts
+target.addEventListener('click', () => console.log('i will never unbind'), options);
+
+// This will not unbind as you have not passed in the same function reference
+target.removeEventListener('click', () => console.log('i will never unbind'), options);
+```
+
+You also need to remember to pass in the same `capture` _value_ for the third argument to `addEventListener`: (`boolean | AddEventListenerOption`) or the event will not be unbound
 
 ```ts
 // add a listener
-target.addEventListener('click', onClick, options);
+target.addEventListener('click', onClick, { capture: true });
 
-// forget the third value (or use a different value)
+// forget the third value: not unbound
 target.addEventListener('click', onClick);
 
-// event is still bound in some browsers!!
+// different capture value: not unbound
+target.addEventListener('click', onClick, { capture: false });
+
+// You need to pass in the same capture value when using the boolean capture format as well
+target.addEventListener('click', onClick, true /* shorthand for {capture: true} */);
+// not unbound
+target.addEventListener('click', onClick);
+// not unbound
+target.addEventListener('click', onClick, false);
 ```
 
 `bind-event-listener` solves these problems!
 
 ## Usage
 
+### `bind`: basic
+
 ```ts
 import { bind } from 'bind-event-listener';
 
-const unbind = bind({
-  target: button,
+const unbind = bind(button, {
   type: 'click',
   listener: onClick,
-  options,
 });
 
 // when your are all done:
 unbind();
 ```
+
+### `bind`: with options
 
 ```ts
 import { bind } from 'bind-event-listener';
 
-const unbind = bind({
-  target: button,
+const unbind = bind(button, {
   type: 'click',
-  // you can now use arrow functions for handlers if you want
-  listener: () => console.log('click'),
-  options,
+  listener: onClick,
+  options: { capture: true, passive: false },
 });
 
 // when your are all done:
 unbind();
 ```
+
+### `bindAll`: basic
 
 ```ts
 import { bindAll } from 'bind-event-listener';
 
-const unbindAll = bind([
+const unbind = bindAll(button, [
   {
-    target: button,
     type: 'click',
     listener: onClick,
-    options,
   },
-  { target: button, type: 'mouseover', listener: onMouseOver, options },
 ]);
 
 // when your are all done:
-unbindAll();
+unbind();
 ```
+
+### `bindAll`: with options
+
+```ts
+import { bindAll } from 'bind-event-listener';
+
+const unbind = bindAll(button, [
+  {
+    type: 'click',
+    listener: onClick,
+    options: { passive: true },
+  },
+  // default options that are applied to all bindings
+  { capture: false },
+]);
+
+// when your are all done:
+unbind();
+```
+
+When using `defaultOptions` for `bindAll`, there `defaultOptions` are merged with the `options` on each binding. Options on the individual bindings will take predicdent. You can think of it like this:
+
+```ts
+const merged = {
+  ...defaultOptions,
+  ...options,
+};
+```
+
+> Note: it is a little bit more complicated than just spreading as the library will also behave correctly when passing in a `boolean` capture argument. An options value can be a boolean (which is shorthand for `{ capture: value}`

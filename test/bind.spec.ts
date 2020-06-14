@@ -5,8 +5,7 @@ it('should bind a listener', () => {
   const button: HTMLElement = document.createElement('button');
   const onClick = jest.fn();
 
-  bind({
-    target: button,
+  bind(button, {
     type: 'click',
     listener: onClick,
   });
@@ -20,8 +19,7 @@ it('should unbind a listener', () => {
   const button: HTMLElement = document.createElement('button');
   const onClick = jest.fn();
 
-  const unbind: UnbindFn = bind({
-    target: button,
+  const unbind: UnbindFn = bind(button, {
     type: 'click',
     listener: onClick,
   });
