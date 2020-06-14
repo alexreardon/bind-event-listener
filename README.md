@@ -1,5 +1,10 @@
 # bind-event-listener
 
+[![npm](https://img.shields.io/npm/v/bind-event-listener.svg)](https://www.npmjs.com/package/bind-event-listener)
+![types](https://img.shields.io/badge/types-typescript-blueviolet)
+[![dependencies](https://david-dm.org/alexreardon/bind-event-listener.svg)](https://david-dm.org/alexreardon/bind-event-listener)
+[![minzip](https://img.shields.io/bundlephobia/minzip/bind-event-listener.svg)](https://www.npmjs.com/package/bind-event-listener)
+
 > A utility to make using `addEventListener` easier. I seem to write this again with every new project, so I made it a library
 
 ```ts
