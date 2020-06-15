@@ -4,7 +4,8 @@
 ![types](https://img.shields.io/badge/types-typescript-blueviolet)
 [![minzip](https://img.shields.io/bundlephobia/minzip/bind-event-listener.svg)](https://www.npmjs.com/package/bind-event-listener)
 
-> A utility to make using `addEventListener` easier. I seem to write this again with every new project, so I made it a library
+> A utility to make binding and (**especially**) unbinding DOM events easier.
+> I seem to write this again with every new project, so I made it a library
 
 ```ts
 import { bind } from 'bind-event-listener';
@@ -188,11 +189,11 @@ function bindAll(
   sharedOptions?: boolean | AddEventListenerOptions,
 ): UnbindFn;
 
-type UnbindFn = () => void;
-
 type Binding = {
   type: string;
   listener: EventListenerOrEventListenerObject;
   options?: boolean | AddEventListenerOptions;
 };
+
+type UnbindFn = () => void;
 ```
