@@ -40,7 +40,7 @@ unbind();
 
 ## Rationale
 
-When using `addEventListener()` you need to remember to manually call `removeEventListener()` correctly in order to unbind the event.
+When using `addEventListener()`, **correctly unbinding** events with `removeEventListener()` can be tricky.
 
 ```ts
 target.addEventListener('click', onClick, options);
