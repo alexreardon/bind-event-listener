@@ -14,7 +14,7 @@ const unbind: UnbindFn = bind(button, {
   listener: onClick,
 });
 
-// when your are all done:
+// when you are all done:
 unbind();
 ```
 
@@ -33,7 +33,7 @@ const unbind = bind(button, [
   },
 ]);
 
-// when your are all done:
+// when you are all done:
 unbind();
 ```
 
@@ -159,7 +159,7 @@ const unbind = bind(button, {
   options: { capture: true, passive: false },
 });
 
-// when your are all done:
+// when you are all done:
 unbind();
 ```
 
@@ -175,7 +175,7 @@ const unbind = bindAll(button, [
   },
 ]);
 
-// when your are all done:
+// when you are all done:
 unbind();
 ```
 
@@ -194,7 +194,7 @@ const unbind = bindAll(button, [
   { capture: false },
 ]);
 
-// when your are all done:
+// when you are all done:
 unbind();
 ```
 
