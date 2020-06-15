@@ -44,6 +44,9 @@ When using `addEventListener()`, **correctly unbinding** events with `removeEven
 
 1. You need to remember to call `removeEventListener` (it can be easy to forget!)
 
+<details>
+<summary>Example</summary>
+
 ```ts
 target.addEventListener('click', onClick, options);
 
@@ -51,7 +54,12 @@ target.addEventListener('click', onClick, options);
 target.removeEventListener('click', onClick, options);
 ```
 
+</details>
+
 2. You need to pass in the same listener _reference_ to `removeEventListener`
+
+<details>
+<summary>Example</summary>
 
 ```ts
 target.addEventListener(
@@ -79,7 +87,12 @@ target.addEventListener('click', () => console.log('i will never unbind'), optio
 target.removeEventListener('click', () => console.log('i will never unbind'), options);
 ```
 
+</details>
+
 3. You need to pass in the same `capture` value option
+
+<details>
+<summary>Example</summary>
 
 ```ts
 // add a listener: AddEventListenerOptions format
@@ -111,6 +124,8 @@ target.addEventListener('click', onClick, true);
 // this would also unbind (different notation)
 target.addEventListener('click', onClick, { capture: true });
 ```
+
+</details>
 
 **`bind-event-listener` solves these problems**
 
@@ -244,3 +259,7 @@ type UnbindFn = () => void;
 ```
 
 > Typescript built in DOM types: [raw view](https://raw.githubusercontent.com/microsoft/TypeScript/master/lib/lib.dom.d.ts), [pretty view](https://github.com/microsoft/TypeScript/blob/master/lib/lib.dom.d.ts) (warning: pretty view seems to crash Github!)
+
+## Cheers 👋
+
+Brought to you by [@alexandereardon](https://twitter.com/alexandereardon)
