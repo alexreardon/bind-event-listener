@@ -204,7 +204,7 @@ import React, { useState, useEffect } from 'react';
 import { bind } from 'bind-event-listener';
 
 export default function App() {
-  const [clickCount, onClick] = useState<number>(0);
+  const [clickCount, onClick] = useState(0);
 
   useEffect(() => {
     const unbind = bind(window, {
@@ -229,14 +229,18 @@ function bind(target: Element, binding: Binding): UnbindFn;
 function bindAll(
   target: Element,
   bindings: Binding[],
+  // AddEventListenerOptions is a built in TypeScript type
   sharedOptions?: boolean | AddEventListenerOptions,
 ): UnbindFn;
 
 type Binding = {
   type: string;
+  // EventListenerOrEventListenerObject is a built in TypeScript type
   listener: EventListenerOrEventListenerObject;
   options?: boolean | AddEventListenerOptions;
 };
 
 type UnbindFn = () => void;
 ```
+
+> Typescript built in DOM types: [raw view](https://raw.githubusercontent.com/microsoft/TypeScript/master/lib/lib.dom.d.ts), [pretty view](https://github.com/microsoft/TypeScript/blob/master/lib/lib.dom.d.ts) (warning: pretty view seems to crash Github!)
