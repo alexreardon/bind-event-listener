@@ -8,9 +8,9 @@
 > I seem to write this again with every new project, so I made it a library
 
 ```ts
-import { bind } from 'bind-event-listener';
+import { bind, UnbindFn } from 'bind-event-listener';
 
-const unbind = bind(button, {
+const unbind: UnbindFn = bind(button, {
   type: 'click',
   listener: onClick,
 });
@@ -42,6 +42,8 @@ unbind();
 
 When using `addEventListener()`, **correctly unbinding** events with `removeEventListener()` can be tricky.
 
+1. You need to remember to call `removeEventListener` (it can be easy to forget!)
+
 ```ts
 target.addEventListener('click', onClick, options);
 
@@ -49,7 +51,7 @@ target.addEventListener('click', onClick, options);
 target.removeEventListener('click', onClick, options);
 ```
 
-You need to pass in the same listener _reference_ (`onClick`), otherwise the original function will not unbind.
+2. You need to pass in the same listener _reference_ to `removeEventListener`
 
 ```ts
 target.addEventListener(
@@ -60,7 +62,8 @@ target.addEventListener(
   options,
 );
 
-// This will not unbind as you have not passed in the same 'onClick' function reference
+// Even those the functions look the same, they don't have the same reference.
+// The original onClick is not unbound!
 target.removeEventListener(
   'click',
   function onClick() {
@@ -70,16 +73,13 @@ target.removeEventListener(
 );
 ```
 
-This means you can also never unbind listeners that are arrow functions
-
 ```ts
+// Inline arrow functions can never be unbound because you have lost the reference!
 target.addEventListener('click', () => console.log('i will never unbind'), options);
-
-// This will not unbind as you have not passed in the same function reference
 target.removeEventListener('click', () => console.log('i will never unbind'), options);
 ```
 
-You also need to remember to pass in the same `capture` _value_ for the third argument to `addEventListener`: (`boolean | AddEventListenerOption`) or the event will not be unbound
+3. You need to pass in the same `capture` value option
 
 ```ts
 // add a listener
@@ -99,16 +99,20 @@ target.addEventListener('click', onClick);
 target.addEventListener('click', onClick, false);
 ```
 
-`bind-event-listener` solves these problems!
+**`bind-event-listener` solves these problems**
+
+1. When you bind an event (or events with `bindAll`) you get back a simple `unbind` function
+2. The unbind function ensures the same listener _reference_ is passed to `removeEventListener`
+3. The unbind function ensures that whatever `capture` value is used with `addEventListener` is used with `removeEventListener`
 
 ## Usage
 
 ### `bind`: basic
 
 ```ts
-import { bind } from 'bind-event-listener';
+import { bind, UnbindFn } from 'bind-event-listener';
 
-const unbind = bind(button, {
+const unbind: UnbindFn = bind(button, {
   type: 'click',
   listener: onClick,
 });
@@ -177,6 +181,32 @@ const merged: AddEventListenerOptions = {
 ```
 
 > Note: it is a little bit more complicated than just object spreading as the library will also behave correctly when passing in a `boolean` capture argument. An options value can be a boolean `{ options: true }` which is shorthand for `{ options: {capture: true } }`
+
+## Recipe: [`react`](https://reactjs.org/) effect
+
+You can return a [cleanup function](https://reactjs.org/docs/hooks-reference.html#cleaning-up-an-effect) from [`useEffect`](https://reactjs.org/docs/hooks-reference.html#useeffect) (or [`useLayoutEffect`](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)). `bind-event-listener` makes this super convenient because you can just return the unbind function from your effect.
+
+```ts
+import React, { useState, useEffect } from 'react';
+import { bind } from 'bind-event-listener';
+
+export default function App() {
+  const [clickCount, onClick] = useState<number>(0);
+
+  useEffect(() => {
+    const unbind = bind(window, {
+      type: 'click',
+      listener: () => onClick((value) => value + 1),
+    });
+
+    return unbind;
+  }, []);
+
+  return <div>Window clicks: {clickCount}</div>;
+}
+```
+
+> You can play with this [example on codesandbox](https://codesandbox.io/s/bind-event-listener-useeffect-mnfi3)
 
 ## Types
 
