@@ -9,6 +9,12 @@
     "type": "git",
     "url": "https://github.com/alexreardon/bind-event-listener.git"
   },
+  "keywords": [
+    "dom",
+    "ui",
+    "event listener",
+    "event handler"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
