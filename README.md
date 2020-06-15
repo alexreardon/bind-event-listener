@@ -2,7 +2,6 @@
 
 [![npm](https://img.shields.io/npm/v/bind-event-listener.svg)](https://www.npmjs.com/package/bind-event-listener)
 ![types](https://img.shields.io/badge/types-typescript-blueviolet)
-[![dependencies](https://david-dm.org/alexreardon/bind-event-listener.svg)](https://david-dm.org/alexreardon/bind-event-listener)
 [![minzip](https://img.shields.io/bundlephobia/minzip/bind-event-listener.svg)](https://www.npmjs.com/package/bind-event-listener)
 
 > A utility to make using `addEventListener` easier. I seem to write this again with every new project, so I made it a library
@@ -167,13 +166,33 @@ const unbind = bindAll(button, [
 unbind();
 ```
 
-When using `defaultOptions` for `bindAll`, there `defaultOptions` are merged with the `options` on each binding. Options on the individual bindings will take predicdent. You can think of it like this:
+When using `defaultOptions` for `bindAll`, the `defaultOptions` are merged with the `options` on each binding. Options on the individual bindings will take precedent. You can think of it like this:
 
 ```ts
-const merged = {
+const merged: AddEventListenerOptions = {
   ...defaultOptions,
   ...options,
 };
 ```
 
-> Note: it is a little bit more complicated than just spreading as the library will also behave correctly when passing in a `boolean` capture argument. An options value can be a boolean (which is shorthand for `{ capture: value}`
+> Note: it is a little bit more complicated than just object spreading as the library will also behave correctly when passing in a `boolean` capture argument. An options value can be a boolean `{ options: true }` which is shorthand for `{ options: {capture: true } }`
+
+## Types
+
+```ts
+function bind(target: Element, binding: Binding): UnbindFn;
+
+function bindAll(
+  target: Element,
+  bindings: Binding[],
+  sharedOptions?: boolean | AddEventListenerOptions,
+): UnbindFn;
+
+type UnbindFn = () => void;
+
+type Binding = {
+  type: string;
+  listener: EventListenerOrEventListenerObject;
+  options?: boolean | AddEventListenerOptions;
+};
+```
