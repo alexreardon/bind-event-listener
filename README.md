@@ -82,21 +82,34 @@ target.removeEventListener('click', () => console.log('i will never unbind'), op
 3. You need to pass in the same `capture` value option
 
 ```ts
-// add a listener
+// add a listener: AddEventListenerOptions format
 target.addEventListener('click', onClick, { capture: true });
 
-// forget the third value: not unbound
-target.addEventListener('click', onClick);
+// not unbound: no capture value
+target.removeEventListener('click', onClick);
 
-// different capture value: not unbound
-target.addEventListener('click', onClick, { capture: false });
+// not unbound: different capture value
+target.removeEventListener('click', onClick, { capture: false });
 
-// You need to pass in the same capture value when using the boolean capture format as well
-target.addEventListener('click', onClick, true /* shorthand for {capture: true} */);
-// not unbound
+// successfully unbound: same capture value
+target.removeEventListener('click', onClick, { capture: true });
+// this would also unbind (different notation)
+target.removeEventListener('click', onClick, true /* shorthand for { capture: true } */);
+```
+
+```ts
+// add a listener: boolean capture format
+target.addEventListener('click', onClick, true /* shorthand for { capture: true } */);
+
+// not unbound: no capture value
 target.addEventListener('click', onClick);
-// not unbound
+// not unbound: different capture value
 target.addEventListener('click', onClick, false);
+
+// successfully unbound: same capture value
+target.addEventListener('click', onClick, true);
+// this would also unbind (different notation)
+target.addEventListener('click', onClick, { capture: true });
 ```
 
 **`bind-event-listener` solves these problems**
