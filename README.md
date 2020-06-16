@@ -238,10 +238,10 @@ export default function App() {
 ## Types
 
 ```ts
-function bind(target: Element, binding: Binding): UnbindFn;
+function bind(target: EventTarget, binding: Binding): UnbindFn;
 
 function bindAll(
-  target: Element,
+  target: EventTarget,
   bindings: Binding[],
   // AddEventListenerOptions is a built in TypeScript type
   sharedOptions?: boolean | AddEventListenerOptions,

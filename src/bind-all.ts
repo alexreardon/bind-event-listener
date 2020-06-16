@@ -36,7 +36,7 @@ function getBinding(original: Binding, sharedOptions?: boolean | AddEventListene
 }
 
 export function bindAll(
-  target: Element,
+  target: EventTarget,
   bindings: Binding[],
   sharedOptions?: boolean | AddEventListenerOptions,
 ): UnbindFn {
