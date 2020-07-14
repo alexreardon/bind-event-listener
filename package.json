@@ -17,7 +17,6 @@
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "module": "dist/index.js",
   "sideEffects": false,
   "config": {
     "prettier_target": "src/**/*.{ts,js,jsx,md,json} test/**/*.{ts,js,jsx,md,json}"
