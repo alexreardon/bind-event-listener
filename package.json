@@ -1,6 +1,6 @@
 {
   "name": "bind-event-listener",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "description": "Making binding and unbinding DOM events easier",
   "author": "Alex Reardon <alexreardon@gmail.com>",
