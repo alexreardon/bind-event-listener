@@ -15,7 +15,11 @@ type GetEventTypeFromListener<T extends AnyFunction> = T extends (this: any, eve
 
 type GetEventType<Target extends EventTarget, Type extends string> =
   `on${Type}` extends keyof Target
-    ? GetEventTypeFromListener<Extract<Target[`on${Type}`], AnyFunction>>
+    ? GetEventTypeFromListener<
+        // remove types that aren't assignable to `AnyFunction`
+        // so that we don't end up with union like `MouseEvent | Event`
+        Extract<Target[`on${Type}`], AnyFunction>
+      >
     : Event;
 
 export function bind<Target extends EventTarget, Type extends string>(
