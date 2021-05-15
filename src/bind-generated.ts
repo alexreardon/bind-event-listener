@@ -1,0 +1,76 @@
+import { UnbindFn, Binding } from './types'
+
+export function bind<Target extends DocumentAndElementEventHandlers, Type extends keyof DocumentAndElementEventHandlersEventMap>(target: Target, { type, listener, options }: Binding<Type, DocumentAndElementEventHandlersEventMap[Type]>): UnbindFn;
+export function bind<Target extends ServiceWorkerRegistration, Type extends keyof ServiceWorkerRegistrationEventMap>(target: Target, { type, listener, options }: Binding<Type, ServiceWorkerRegistrationEventMap[Type]>): UnbindFn;
+export function bind<Target extends XMLHttpRequestEventTarget, Type extends keyof XMLHttpRequestEventTargetEventMap>(target: Target, { type, listener, options }: Binding<Type, XMLHttpRequestEventTargetEventMap[Type]>): UnbindFn;
+export function bind<Target extends AudioScheduledSourceNode, Type extends keyof AudioScheduledSourceNodeEventMap>(target: Target, { type, listener, options }: Binding<Type, AudioScheduledSourceNodeEventMap[Type]>): UnbindFn;
+export function bind<Target extends SpeechSynthesisUtterance, Type extends keyof SpeechSynthesisUtteranceEventMap>(target: Target, { type, listener, options }: Binding<Type, SpeechSynthesisUtteranceEventMap[Type]>): UnbindFn;
+export function bind<Target extends ServiceWorkerContainer, Type extends keyof ServiceWorkerContainerEventMap>(target: Target, { type, listener, options }: Binding<Type, ServiceWorkerContainerEventMap[Type]>): UnbindFn;
+export function bind<Target extends MSInputMethodContext, Type extends keyof MSInputMethodContextEventMap>(target: Target, { type, listener, options }: Binding<Type, MSInputMethodContextEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCSrtpSdesTransport, Type extends keyof RTCSrtpSdesTransportEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCSrtpSdesTransportEventMap[Type]>): UnbindFn;
+export function bind<Target extends GlobalEventHandlers, Type extends keyof GlobalEventHandlersEventMap>(target: Target, { type, listener, options }: Binding<Type, GlobalEventHandlersEventMap[Type]>): UnbindFn;
+export function bind<Target extends WindowEventHandlers, Type extends keyof WindowEventHandlersEventMap>(target: Target, { type, listener, options }: Binding<Type, WindowEventHandlersEventMap[Type]>): UnbindFn;
+export function bind<Target extends HTMLFrameSetElement, Type extends keyof HTMLFrameSetElementEventMap>(target: Target, { type, listener, options }: Binding<Type, HTMLFrameSetElementEventMap[Type]>): UnbindFn;
+export function bind<Target extends OfflineAudioContext, Type extends keyof OfflineAudioContextEventMap>(target: Target, { type, listener, options }: Binding<Type, OfflineAudioContextEventMap[Type]>): UnbindFn;
+export function bind<Target extends ScriptProcessorNode, Type extends keyof ScriptProcessorNodeEventMap>(target: Target, { type, listener, options }: Binding<Type, ScriptProcessorNodeEventMap[Type]>): UnbindFn;
+export function bind<Target extends HTMLMarqueeElement, Type extends keyof HTMLMarqueeElementEventMap>(target: Target, { type, listener, options }: Binding<Type, HTMLMarqueeElementEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCPeerConnection, Type extends keyof RTCPeerConnectionEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCPeerConnectionEventMap[Type]>): UnbindFn;
+export function bind<Target extends ScreenOrientation, Type extends keyof ScreenOrientationEventMap>(target: Target, { type, listener, options }: Binding<Type, ScreenOrientationEventMap[Type]>): UnbindFn;
+export function bind<Target extends SpeechRecognition, Type extends keyof SpeechRecognitionEventMap>(target: Target, { type, listener, options }: Binding<Type, SpeechRecognitionEventMap[Type]>): UnbindFn;
+export function bind<Target extends ApplicationCache, Type extends keyof ApplicationCacheEventMap>(target: Target, { type, listener, options }: Binding<Type, ApplicationCacheEventMap[Type]>): UnbindFn;
+export function bind<Target extends AudioWorkletNode, Type extends keyof AudioWorkletNodeEventMap>(target: Target, { type, listener, options }: Binding<Type, AudioWorkletNodeEventMap[Type]>): UnbindFn;
+export function bind<Target extends BaseAudioContext, Type extends keyof BaseAudioContextEventMap>(target: Target, { type, listener, options }: Binding<Type, BaseAudioContextEventMap[Type]>): UnbindFn;
+export function bind<Target extends BroadcastChannel, Type extends keyof BroadcastChannelEventMap>(target: Target, { type, listener, options }: Binding<Type, BroadcastChannelEventMap[Type]>): UnbindFn;
+export function bind<Target extends HTMLMediaElement, Type extends keyof HTMLMediaElementEventMap>(target: Target, { type, listener, options }: Binding<Type, HTMLMediaElementEventMap[Type]>): UnbindFn;
+export function bind<Target extends IDBOpenDBRequest, Type extends keyof IDBOpenDBRequestEventMap>(target: Target, { type, listener, options }: Binding<Type, IDBOpenDBRequestEventMap[Type]>): UnbindFn;
+export function bind<Target extends MediaStreamTrack, Type extends keyof MediaStreamTrackEventMap>(target: Target, { type, listener, options }: Binding<Type, MediaStreamTrackEventMap[Type]>): UnbindFn;
+export function bind<Target extends PermissionStatus, Type extends keyof PermissionStatusEventMap>(target: Target, { type, listener, options }: Binding<Type, PermissionStatusEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCDtlsTransport, Type extends keyof RTCDtlsTransportEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCDtlsTransportEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCSctpTransport, Type extends keyof RTCSctpTransportEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCSctpTransportEventMap[Type]>): UnbindFn;
+export function bind<Target extends SourceBufferList, Type extends keyof SourceBufferListEventMap>(target: Target, { type, listener, options }: Binding<Type, SourceBufferListEventMap[Type]>): UnbindFn;
+export function bind<Target extends HTMLBodyElement, Type extends keyof HTMLBodyElementEventMap>(target: Target, { type, listener, options }: Binding<Type, HTMLBodyElementEventMap[Type]>): UnbindFn;
+export function bind<Target extends MediaKeySession, Type extends keyof MediaKeySessionEventMap>(target: Target, { type, listener, options }: Binding<Type, MediaKeySessionEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCIceTransport, Type extends keyof RTCIceTransportEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCIceTransportEventMap[Type]>): UnbindFn;
+export function bind<Target extends SpeechSynthesis, Type extends keyof SpeechSynthesisEventMap>(target: Target, { type, listener, options }: Binding<Type, SpeechSynthesisEventMap[Type]>): UnbindFn;
+export function bind<Target extends AbstractWorker, Type extends keyof AbstractWorkerEventMap>(target: Target, { type, listener, options }: Binding<Type, AbstractWorkerEventMap[Type]>): UnbindFn;
+export function bind<Target extends IDBTransaction, Type extends keyof IDBTransactionEventMap>(target: Target, { type, listener, options }: Binding<Type, IDBTransactionEventMap[Type]>): UnbindFn;
+export function bind<Target extends MediaQueryList, Type extends keyof MediaQueryListEventMap>(target: Target, { type, listener, options }: Binding<Type, MediaQueryListEventMap[Type]>): UnbindFn;
+export function bind<Target extends PaymentRequest, Type extends keyof PaymentRequestEventMap>(target: Target, { type, listener, options }: Binding<Type, PaymentRequestEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCDataChannel, Type extends keyof RTCDataChannelEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCDataChannelEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCIceGatherer, Type extends keyof RTCIceGathererEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCIceGathererEventMap[Type]>): UnbindFn;
+export function bind<Target extends XMLHttpRequest, Type extends keyof XMLHttpRequestEventMap>(target: Target, { type, listener, options }: Binding<Type, XMLHttpRequestEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCDTMFSender, Type extends keyof RTCDTMFSenderEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCDTMFSenderEventMap[Type]>): UnbindFn;
+export function bind<Target extends RTCDtmfSender, Type extends keyof RTCDtmfSenderEventMap>(target: Target, { type, listener, options }: Binding<Type, RTCDtmfSenderEventMap[Type]>): UnbindFn;
+export function bind<Target extends SVGSVGElement, Type extends keyof SVGSVGElementEventMap>(target: Target, { type, listener, options }: Binding<Type, SVGSVGElementEventMap[Type]>): UnbindFn;
+export function bind<Target extends ServiceWorker, Type extends keyof ServiceWorkerEventMap>(target: Target, { type, listener, options }: Binding<Type, ServiceWorkerEventMap[Type]>): UnbindFn;
+export function bind<Target extends TextTrackList, Type extends keyof TextTrackListEventMap>(target: Target, { type, listener, options }: Binding<Type, TextTrackListEventMap[Type]>): UnbindFn;
+export function bind<Target extends MediaDevices, Type extends keyof MediaDevicesEventMap>(target: Target, { type, listener, options }: Binding<Type, MediaDevicesEventMap[Type]>): UnbindFn;
+export function bind<Target extends Notification, Type extends keyof NotificationEventMap>(target: Target, { type, listener, options }: Binding<Type, NotificationEventMap[Type]>): UnbindFn;
+export function bind<Target extends SourceBuffer, Type extends keyof SourceBufferEventMap>(target: Target, { type, listener, options }: Binding<Type, SourceBufferEventMap[Type]>): UnbindFn;
+export function bind<Target extends TextTrackCue, Type extends keyof TextTrackCueEventMap>(target: Target, { type, listener, options }: Binding<Type, TextTrackCueEventMap[Type]>): UnbindFn;
+export function bind<Target extends AbortSignal, Type extends keyof AbortSignalEventMap>(target: Target, { type, listener, options }: Binding<Type, AbortSignalEventMap[Type]>): UnbindFn;
+export function bind<Target extends EventSource, Type extends keyof EventSourceEventMap>(target: Target, { type, listener, options }: Binding<Type, EventSourceEventMap[Type]>): UnbindFn;
+export function bind<Target extends HTMLElement, Type extends keyof HTMLElementEventMap>(target: Target, { type, listener, options }: Binding<Type, HTMLElementEventMap[Type]>): UnbindFn;
+export function bind<Target extends IDBDatabase, Type extends keyof IDBDatabaseEventMap>(target: Target, { type, listener, options }: Binding<Type, IDBDatabaseEventMap[Type]>): UnbindFn;
+export function bind<Target extends MediaSource, Type extends keyof MediaSourceEventMap>(target: Target, { type, listener, options }: Binding<Type, MediaSourceEventMap[Type]>): UnbindFn;
+export function bind<Target extends MediaStream, Type extends keyof MediaStreamEventMap>(target: Target, { type, listener, options }: Binding<Type, MediaStreamEventMap[Type]>): UnbindFn;
+export function bind<Target extends MessagePort, Type extends keyof MessagePortEventMap>(target: Target, { type, listener, options }: Binding<Type, MessagePortEventMap[Type]>): UnbindFn;
+export function bind<Target extends Performance, Type extends keyof PerformanceEventMap>(target: Target, { type, listener, options }: Binding<Type, PerformanceEventMap[Type]>): UnbindFn;
+export function bind<Target extends FileReader, Type extends keyof FileReaderEventMap>(target: Target, { type, listener, options }: Binding<Type, FileReaderEventMap[Type]>): UnbindFn;
+export function bind<Target extends IDBRequest, Type extends keyof IDBRequestEventMap>(target: Target, { type, listener, options }: Binding<Type, IDBRequestEventMap[Type]>): UnbindFn;
+export function bind<Target extends SVGElement, Type extends keyof SVGElementEventMap>(target: Target, { type, listener, options }: Binding<Type, SVGElementEventMap[Type]>): UnbindFn;
+export function bind<Target extends Animation, Type extends keyof AnimationEventMap>(target: Target, { type, listener, options }: Binding<Type, AnimationEventMap[Type]>): UnbindFn;
+export function bind<Target extends TextTrack, Type extends keyof TextTrackEventMap>(target: Target, { type, listener, options }: Binding<Type, TextTrackEventMap[Type]>): UnbindFn;
+export function bind<Target extends WebSocket, Type extends keyof WebSocketEventMap>(target: Target, { type, listener, options }: Binding<Type, WebSocketEventMap[Type]>): UnbindFn;
+export function bind<Target extends Document, Type extends keyof DocumentEventMap>(target: Target, { type, listener, options }: Binding<Type, DocumentEventMap[Type]>): UnbindFn;
+export function bind<Target extends Element, Type extends keyof ElementEventMap>(target: Target, { type, listener, options }: Binding<Type, ElementEventMap[Type]>): UnbindFn;
+export function bind<Target extends Window, Type extends keyof WindowEventMap>(target: Target, { type, listener, options }: Binding<Type, WindowEventMap[Type]>): UnbindFn;
+export function bind<Target extends Worker, Type extends keyof WorkerEventMap>(target: Target, { type, listener, options }: Binding<Type, WorkerEventMap[Type]>): UnbindFn;
+export function bind<Target extends EventTarget, Type extends string>(target: Target, { type, listener, options }: Binding<Type, Event>): UnbindFn;
+export function bind<Target extends EventTarget, Type extends string>(target: Target, { type, listener, options }: Binding<Type, Event>): UnbindFn {
+  target.addEventListener(type, listener, options);
+
+  return function unbind() {
+    target.removeEventListener(type, listener, options);
+  };
+}
