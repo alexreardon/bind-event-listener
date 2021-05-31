@@ -20,13 +20,17 @@ type GetEventTypeFromListener<T extends AnyFunction> = T extends (this: any, eve
 
 export type Binding<Target extends EventTarget = EventTarget, Type extends string = string> = {
   type: Type;
-  listener: Listener<GetEventType<Target, Type>>;
+  listener: Listener<GetEventType<Target, Type>, Target>;
   options?: boolean | AddEventListenerOptions;
 };
 
-export type Listener<Ev extends Event> =
-  | { handleEvent(e: Ev): void }
+export type Listener<Ev extends Event, Target extends EventTarget> =
+  | ListenerObject<Ev>
   // using bivariance hack here so if the user
   // wants to narrow event type by hand TS
   // won't give him an error
-  | { bivarianceHack(e: Ev): void }['bivarianceHack'];
+  | { bivarianceHack(this: Target, e: Ev): void }['bivarianceHack'];
+
+type ListenerObject<Ev extends Event> = {
+  handleEvent(this: ListenerObject<Ev>, Ee: Ev): void;
+};
