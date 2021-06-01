@@ -21,7 +21,7 @@ unbind();
 ```ts
 import { bindAll } from 'bind-event-listener';
 
-const unbind = bind(button, [
+const unbind = bindAll(button, [
   {
     type: 'click',
     listener: onClick,
