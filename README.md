@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/bind-event-listener.svg)](https://www.npmjs.com/package/bind-event-listener)
 ![types](https://img.shields.io/badge/types-typescript-blueviolet)
+[![minzip](https://img.shields.io/bundlephobia/minzip/bind-event-listener.svg)](https://www.npmjs.com/package/bind-event-listener)
 
 > A utility to make binding and (**especially**) unbinding DOM events easier.
 > I seem to write this again with every new project, so I made it a library
@@ -11,7 +12,7 @@ import { bind, UnbindFn } from 'bind-event-listener';
 
 const unbind: UnbindFn = bind(button, {
   type: 'click',
-  listener: onClick,
+  listener: function onClick(event) {},
 });
 
 // when you are all done:
@@ -21,15 +22,15 @@ unbind();
 ```ts
 import { bindAll } from 'bind-event-listener';
 
-const unbind = bind(button, [
+const unbind = bindAll(button, [
   {
     type: 'click',
-    listener: onClick,
+    listener: function onClick(event) {},
     options: { capture: true },
   },
   {
     type: 'mouseover',
-    listener: onMouseOver,
+    listener: function onMouseOver(event) {},
   },
 ]);
 
@@ -49,7 +50,6 @@ When using `addEventListener()`, **correctly unbinding** events with `removeEven
 ```ts
 target.addEventListener('click', onClick, options);
 
-// You need to remember to call removeEventListener to unbind the event
 target.removeEventListener('click', onClick, options);
 ```
 
@@ -132,6 +132,10 @@ target.addEventListener('click', onClick, { capture: true });
 2. The unbind function ensures the same listener _reference_ is passed to `removeEventListener`
 3. The unbind function ensures that whatever `capture` value is used with `addEventListener` is used with `removeEventListener`
 
+You will find an even fuller rationale for this project in my course: ["The Ultimate Guide for Understanding DOM Events"](https://egghead.io/courses/the-ultimate-guide-for-understanding-dom-events-6c0c0d23?af=2jc3e4)
+
+[![share-card-dom-events](https://user-images.githubusercontent.com/2182637/120963089-52a45f00-c7a4-11eb-82a7-a04c2731999a.jpg)](https://egghead.io/courses/the-ultimate-guide-for-understanding-dom-events-6c0c0d23?af=2jc3e4)
+
 ## Usage
 
 ### `bind`: basic
@@ -208,6 +212,46 @@ const merged: AddEventListenerOptions = {
 ```
 
 > Note: it is a little bit more complicated than just object spreading as the library will also behave correctly when passing in a `boolean` capture argument. An options value can be a boolean `{ options: true }` which is shorthand for `{ options: {capture: true } }`
+
+## Types
+
+Thanks to the great work by [@Ayub-Begimkulov](https://github.com/Ayub-Begimkulov) `bind-event-listener` has fantastic typescript types
+
+```ts
+import invariant from 'tiny-invariant';
+import { bind } from 'bind-event-listener';
+
+bind(window, {
+  type: 'click',
+  function: function onClick(event) {
+    // `event` is correctly typed as a 'MouseEvent'
+    // `this` is correctly typed as `window` (the event target that the event listener is added to)
+  },
+});
+
+const button = document.querySelector('button');
+invariant(button instanceof HTMLElement);
+
+bind(button, {
+  type: 'click',
+  function: function onClick(event) {
+    // `event` is correctly typed as a 'MouseEvent'
+    // `this` is correctly typed as `button` (the event target that the event listener is added to)
+  },
+});
+
+const object = {
+  handleEvent: function onClick(event) {
+    // `event` is correctly typed as a 'MouseEvent'
+    // `this` is correctly typed as `object` (the event listener object that the event listener is added to)
+  },
+};
+
+bind(button, {
+  type: 'click',
+  function: object,
+});
+```
 
 ## Recipe: [`react`](https://reactjs.org/) effect
 
