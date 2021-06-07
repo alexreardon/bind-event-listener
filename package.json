@@ -25,23 +25,33 @@
     "/dist",
     "/src"
   ],
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "330B"
+    }
+  ],
   "scripts": {
     "typescript:check": "yarn tsc --noEmit",
     "typescript:watch": "tsc --watch",
     "typescript:build": "tsc",
     "prettier:check": "prettier --debug-check $npm_package_config_prettier_target",
     "prettier:write": "prettier --write $npm_package_config_prettier_target",
+    "validate": "yarn typescript:check && yarn prettier:check",
     "test": "yarn jest",
+    "size:check": "size-limit",
     "build:clean": "rimraf dist",
     "build": "yarn build:clean && yarn typescript:build",
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.11.0",
     "@types/jest": "^26.0.0",
     "expect-type": "^0.11.0",
     "jest": "^26.0.1",
     "prettier": "^2.3.0",
     "rimraf": "^3.0.2",
+    "size-limit": "^4.11.0",
     "ts-jest": "^26.1.0",
     "typescript": "^4.3.2"
   },
