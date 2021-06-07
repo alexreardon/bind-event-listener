@@ -49,7 +49,7 @@
     "@types/jest": "^26.0.0",
     "expect-type": "^0.11.0",
     "jest": "^26.0.1",
-    "prettier": "^2.3.0",
+    "prettier": "^2.3.1",
     "rimraf": "^3.0.2",
     "size-limit": "^4.11.0",
     "ts-jest": "^26.1.0",
