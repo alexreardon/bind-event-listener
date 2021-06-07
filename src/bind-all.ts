@@ -35,6 +35,85 @@ function getBinding(original: Binding, sharedOptions?: boolean | AddEventListene
   return binding;
 }
 
+export function bindAll<Target extends EventTarget, Type extends string>(
+  target: Target,
+  bindings: [Binding<Target, Type>],
+  sharedOptions?: boolean | AddEventListenerOptions,
+): UnbindFn;
+export function bindAll<Target extends EventTarget, Type1 extends string, Type2 extends string>(
+  target: Target,
+  bindings: [Binding<Target, Type1>, Binding<Target, Type2>],
+  sharedOptions?: boolean | AddEventListenerOptions,
+): UnbindFn;
+export function bindAll<
+  Target extends EventTarget,
+  Type1 extends string,
+  Type2 extends string,
+  Type3 extends string,
+>(
+  target: Target,
+  bindings: [Binding<Target, Type1>, Binding<Target, Type2>, Binding<Target, Type3>],
+  sharedOptions?: boolean | AddEventListenerOptions,
+): UnbindFn;
+export function bindAll<
+  Target extends EventTarget,
+  Type1 extends string,
+  Type2 extends string,
+  Type3 extends string,
+  Type4 extends string,
+>(
+  target: Target,
+  bindings: [
+    Binding<Target, Type1>,
+    Binding<Target, Type2>,
+    Binding<Target, Type3>,
+    Binding<Target, Type4>,
+  ],
+  sharedOptions?: boolean | AddEventListenerOptions,
+): UnbindFn;
+export function bindAll<
+  Target extends EventTarget,
+  Type1 extends string,
+  Type2 extends string,
+  Type3 extends string,
+  Type4 extends string,
+  Type5 extends string,
+>(
+  target: Target,
+  bindings: [
+    Binding<Target, Type1>,
+    Binding<Target, Type2>,
+    Binding<Target, Type3>,
+    Binding<Target, Type4>,
+    Binding<Target, Type5>,
+  ],
+  sharedOptions?: boolean | AddEventListenerOptions,
+): UnbindFn;
+export function bindAll<
+  Target extends EventTarget,
+  Type1 extends string,
+  Type2 extends string,
+  Type3 extends string,
+  Type4 extends string,
+  Type5 extends string,
+  Type6 extends string,
+>(
+  target: Target,
+  bindings: [
+    Binding<Target, Type1>,
+    Binding<Target, Type2>,
+    Binding<Target, Type3>,
+    Binding<Target, Type4>,
+    Binding<Target, Type5>,
+    Binding<Target, Type6>,
+  ],
+  sharedOptions?: boolean | AddEventListenerOptions,
+): UnbindFn;
+export function bindAll(
+  target: EventTarget,
+  bindings: Binding[],
+  sharedOptions?: boolean | AddEventListenerOptions,
+): UnbindFn;
 export function bindAll(
   target: EventTarget,
   bindings: Binding[],
@@ -46,6 +125,6 @@ export function bindAll(
   });
 
   return function unbindAll() {
-    unbinds.forEach((unbind: UnbindFn) => unbind());
+    unbinds.forEach((unbind) => unbind());
   };
 }
