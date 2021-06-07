@@ -31,6 +31,7 @@
     "typescript:build": "tsc",
     "prettier:check": "prettier --debug-check $npm_package_config_prettier_target",
     "prettier:write": "prettier --write $npm_package_config_prettier_target",
+    "validate": "yarn typescript:check && yarn lint && yarn prettier:check",
     "test": "yarn jest",
     "build:clean": "rimraf dist",
     "build": "yarn build:clean && yarn typescript:build",
