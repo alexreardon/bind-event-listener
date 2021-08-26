@@ -215,7 +215,9 @@ const merged: AddEventListenerOptions = {
 
 ## Types
 
-Thanks to the great work by [@Ayub-Begimkulov](https://github.com/Ayub-Begimkulov) `bind-event-listener` has fantastic typescript types
+Thanks to the great work by [@Ayub-Begimkulov](https://github.com/Ayub-Begimkulov) `bind-event-listener` has fantastic TypeScript types
+
+> ⚠️ TypeScript 4.1+ is required
 
 ```ts
 import invariant from 'tiny-invariant';
