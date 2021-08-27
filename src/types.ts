@@ -29,7 +29,7 @@ export type Listener<Ev extends Event, Target extends EventTarget> =
   // For a listener function, the `this` binding is the target the event listener is added to
   // using bivariance hack here so if the user
   // wants to narrow event type by hand TS
-  // won't give him an error
+  // won't give them an error
   | { bivarianceHack(this: Target, e: Ev): void }['bivarianceHack'];
 
 type ListenerObject<Ev extends Event> = {
