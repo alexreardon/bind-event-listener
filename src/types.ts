@@ -36,3 +36,9 @@ type ListenerObject<Ev extends Event> = {
   // For listener objects, the handleEvent function has the object as the `this` binding
   handleEvent(this: ListenerObject<Ev>, Ee: Ev): void;
 };
+
+export type PossibleEventType<K> = K extends any
+  ? K extends `on${infer Type}`
+    ? Type
+    : never
+  : never;

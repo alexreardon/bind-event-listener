@@ -1,6 +1,6 @@
-import { UnbindFn, Binding } from './types';
+import { UnbindFn, Binding, PossibleEventType } from './types';
 
-export function bind<Target extends EventTarget, Type extends string>(
+export function bind<Target extends EventTarget, Type extends PossibleEventType<keyof Target>>(
   target: Target,
   { type, listener, options }: Binding<Target, Type>,
 ): UnbindFn;
