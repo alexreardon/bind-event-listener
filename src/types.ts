@@ -1,38 +1,89 @@
-export type UnbindFn = () => void;
 
-type AnyFunction = (...args: any[]) => any;
+export { Bind, BindAll, BindingOf, Binding, EventMap, BindingOptions, TypesOptions }
 
-type GetEventType<Target extends EventTarget, Type extends string> = Target extends unknown
-  ? `on${Type}` extends keyof Target
-    ? GetEventTypeFromListener<
-        // remove types that aren't assignable to `AnyFunction`
-        // so that we don't end up with union like `MouseEvent | Event`
-        Extract<Target[`on${Type}`], AnyFunction>
-      >
-    : Event
-  : never;
+type Bind =
+  { <T extends EventTarget>(target: T, binding: BindingOf<T>): () => void
+  , <T extends EventTarget>(target: T, binding: UntypedBindingOf<T>): () => void
+  }
 
-type GetEventTypeFromListener<T extends AnyFunction> = T extends (this: any, event: infer U) => any
-  ? U extends Event
-    ? U
-    : Event
-  : Event;
+type BindAll =
+  { <T extends EventTarget>
+      ( target: T
+      , bindings: BindingOf<T>[]
+      , defaultOptions?: boolean | AddEventListenerOptions
+      ):
+        () => void
+  , <T extends EventTarget>
+      ( target: T
+      , bindings: UntypedBindingOf<T>[]
+      , defaultOptions?: boolean | AddEventListenerOptions
+      ):
+        () => void
+  }
 
-export type Binding<Target extends EventTarget = EventTarget, Type extends string = string> = {
-  type: Type;
-  listener: Listener<GetEventType<Target, Type>, Target>;
-  options?: boolean | AddEventListenerOptions;
-};
+type BindingOf<T extends EventTarget> =
+  T extends unknown
+    ? { [N in keyof EventMap<T>]:
+        Binding<T, N>
+      }[keyof EventMap<T>]
+    : never
 
-export type Listener<Ev extends Event, Target extends EventTarget> =
-  | ListenerObject<Ev>
-  // For a listener function, the `this` binding is the target the event listener is added to
-  // using bivariance hack here so if the user
-  // wants to narrow event type by hand TS
-  // won't give them an error
-  | { bivarianceHack(this: Target, e: Ev): void }['bivarianceHack'];
+interface TypesOptions {}
+type UntypedBindingOf<T extends EventTarget> = 
+  TypesOptions extends { disallowUntypedEvents: true }
+    ? never
+    : Binding<T, UnknownEventName>
 
-type ListenerObject<Ev extends Event> = {
-  // For listener objects, the handleEvent function has the object as the `this` binding
-  handleEvent(this: ListenerObject<Ev>, Ee: Ev): void;
-};
+
+type EventMap<T extends EventTarget> =
+  TrimOnFromKey<{
+    [K in Extract<keyof T, `on${string}`>]:
+      Parameters<Extract<T[K], (e: any) => any>>[0]
+  }>
+    
+type Binding<T extends EventTarget, N extends EventName<T>> =
+  { type: InferStringLiteral<N>
+  , listener: Listener<T, N>
+  , options?: BindingOptions
+  }
+
+type Listener<T extends EventTarget, N extends EventName<T>> =
+  | Bivariant<(this: T, event: Event_<T, N>) => void>
+  | ListenerObject<T, N>
+
+interface ListenerObject<T extends EventTarget, N extends EventName<T>>
+  { handleEvent(this: ListenerObject<T, N>, event: Event_<T, N>): void
+  }
+
+type BindingOptions =
+  | undefined
+  | boolean
+  | AddEventListenerOptions
+
+type EventName<T extends EventTarget> =
+  | keyof EventMap<T>
+  | UnknownEventName
+
+type UnknownEventName =
+  string
+
+type Event_<T extends EventTarget, N extends EventName<T>> =
+  N extends keyof EventMap<T>
+    ? EventMap<T>[N]
+    : UnknownEvent
+
+type UnknownEvent =
+  Event
+
+type InferStringLiteral<T> =
+  T extends string ? T : string
+
+type TrimOnFromKey<M> =
+  { [N in (keyof M extends `on${infer N}` ? N : never)]:
+      M[`on${N}` & keyof M]
+  }
+
+type Bivariant<F> =
+  F extends (this: infer T, ...a: infer A) => infer R
+    ? { _(this: T, ...a: A): R }["_"]
+    : never
