@@ -3,16 +3,16 @@ import { Binding } from '../../src';
 import { Listener } from '../../src/types';
 
 // correctly extracts event type from target
-expectTypeOf<Binding<Window, 'beforeunload'>>().toEqualTypeOf<{
-  type: 'beforeunload';
-  listener: Listener<BeforeUnloadEvent, Window>;
+expectTypeOf<Binding<HTMLElement, 'click'>>().toEqualTypeOf<{
+  type: 'click';
+  listener: Listener<MouseEvent, HTMLElement>;
   options?: boolean | AddEventListenerOptions;
 }>();
 
 // fallbacks to Event if handler isn't present on the target
-expectTypeOf<Binding<Window, 'DOMContentLoaded'>>().toEqualTypeOf<{
-  type: 'DOMContentLoaded';
-  listener: Listener<Event, Window>;
+expectTypeOf<Binding<HTMLElement, 'my-custom-event'>>().toEqualTypeOf<{
+  type: 'my-custom-event';
+  listener: Listener<Event, HTMLElement>;
   options?: boolean | AddEventListenerOptions;
 }>();
 
