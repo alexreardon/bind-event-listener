@@ -1,17 +1,6 @@
 import { UnbindFn } from '../../src/types';
 import { bind } from '../../src';
 
-it('test', () => {
-  const button: HTMLElement = document.createElement('button');
-
-  bind(button, {
-    type: 'click',
-    listener: (event: Event) => {
-      console.log('button', event);
-    },
-  });
-});
-
 it('should bind a listener', () => {
   const button: HTMLElement = document.createElement('button');
   const onClick = jest.fn();
