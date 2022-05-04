@@ -2,7 +2,8 @@ import { expectTypeOf } from 'expect-type';
 import { Binding, Listener } from '../../src';
 import { expectType, TypeOf } from 'ts-expect';
 
-it('should correct extract the event type', () => {
+// extracting event type
+{
   // correctly extracts event type from target (HTMLElement)
   expectTypeOf<Binding<HTMLElement, 'click'>>().toEqualTypeOf<{
     type: 'click';
@@ -31,9 +32,10 @@ it('should correct extract the event type', () => {
 
   // not okay to use the wrong `event` type
   expectType<TypeOf<ClickListener, (this: HTMLElement, e: AnimationEvent) => void>>(false);
-});
+}
 
-it('should extract event types from the Window', () => {
+// extracting event types from the `window`
+{
   // correctly extracts event type from target (Window)
   expectTypeOf<Binding<Window, 'click'>>().toEqualTypeOf<{
     type: 'click';
@@ -62,9 +64,10 @@ it('should extract event types from the Window', () => {
 
   // not okay to use the wrong `event` type
   expectType<TypeOf<ClickListener, (this: Window, e: AnimationEvent) => void>>(false);
-});
+}
 
-describe('fallbacks', () => {
+// fallbacks for when there is no `on${EventName}` property
+{
   expectTypeOf<Binding<Window, 'DOMContentLoaded'>>().toEqualTypeOf<{
     type: 'DOMContentLoaded';
     listener: Listener<Window, 'DOMContentLoaded'>;
@@ -78,9 +81,10 @@ describe('fallbacks', () => {
   expectType<TypeOf<Listener<Window, 'DOMContentLoaded'>, (this: Window, e: UIEvent) => void>>(
     false,
   );
-});
+}
 
-it('should handle custom events', () => {
+// custom events
+{
   expectTypeOf<Binding<HTMLElement, 'my-custom-event'>>().toEqualTypeOf<{
     type: 'my-custom-event';
     listener: Listener<HTMLElement, 'my-custom-event'>;
@@ -95,9 +99,11 @@ it('should handle custom events', () => {
   expectType<
     TypeOf<Listener<HTMLElement, 'my-custom-event'>, (this: HTMLElement, e: CustomEvent) => void>
   >(false);
-});
+}
 
-it('should allow unions in the Binding type', () => {
+// The `Binding` type should allow EventTarget unions
+// No idea why we want this, but it exists 🙈
+{
   // correctly works with union target
   expectTypeOf<Binding<Window | HTMLElement, 'beforeunload'>>().toEqualTypeOf<{
     type: 'beforeunload';
@@ -118,9 +124,11 @@ it('should allow unions in the Binding type', () => {
       (this: Window | HTMLElement, e: AnimationEvent) => void
     >
   >(false);
-});
+}
 
-it('should allow type name unions', () => {
+// The `Binding` type should allow EventName unions
+// No idea why we want this, but it exists 🙈
+{
   // correctly works with union target
 
   type OurListener = Listener<Window | HTMLElement, 'keydown' | 'click'>;
@@ -137,4 +145,4 @@ it('should allow type name unions', () => {
 
   // too narrow
   expectType<TypeOf<OurListener, (this: Window | Element, e: MouseEvent) => void>>(false);
-});
+}
