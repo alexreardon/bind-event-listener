@@ -2,6 +2,13 @@ import { expectTypeOf } from 'expect-type';
 import { Binding, Listener } from '../../src';
 import { expectType, TypeOf } from 'ts-expect';
 
+// This is how you can 'teach' TS about your custom event
+declare global {
+  interface HTMLElement {
+    'onmy-custom-registered-event': CustomEvent<{ foo: number }>;
+  }
+}
+
 // extracting event type
 {
   // correctly extracts event type from target (HTMLElement)
@@ -95,10 +102,18 @@ import { expectType, TypeOf } from 'ts-expect';
   expectType<
     TypeOf<Listener<HTMLElement, 'my-custom-event'>, (this: HTMLElement, e: Event) => void>
   >(true);
-  // Cannot cast to `CustomEvent` as we don't know what the custom events are!!
+  // Cannot safely cast to `CustomEvent` as we don't know what the custom events are!!
   expectType<
     TypeOf<Listener<HTMLElement, 'my-custom-event'>, (this: HTMLElement, e: CustomEvent) => void>
   >(false);
+  // Cannot cast to `CustomEvent` as we don't know what the custom events are!!
+
+  expectType<
+    TypeOf<
+      Listener<HTMLElement, 'my-custom-registered-event'>,
+      (this: HTMLElement, e: CustomEvent<{ foo: number }>) => void
+    >
+  >(true);
 }
 
 // The `Binding` type should allow EventTarget unions
