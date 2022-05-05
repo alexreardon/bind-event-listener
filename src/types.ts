@@ -20,12 +20,6 @@ type GetEventType<
   ? ExtractEventTypeFromHandler<Target[`on${EventName}`]>
   : Event;
 
-export type Binding<Target extends EventTarget = EventTarget, EventName extends string = string> = {
-  type: EventName;
-  listener: Listener<Target, EventName>;
-  options?: boolean | AddEventListenerOptions;
-};
-
 // For listener objects, the handleEvent function has the object as the `this` binding
 type ListenerObject<TEvent extends Event> = {
   handleEvent(this: ListenerObject<TEvent>, e: TEvent): void;
@@ -35,3 +29,9 @@ type ListenerObject<TEvent extends Event> = {
 export type Listener<Target extends EventTarget, EventName extends string> =
   | ListenerObject<GetEventType<Target, EventName>>
   | { (this: Target, e: GetEventType<Target, EventName>): void };
+
+export type Binding<Target extends EventTarget = EventTarget, EventName extends string = string> = {
+  type: EventName;
+  listener: Listener<Target, EventName>;
+  options?: boolean | AddEventListenerOptions;
+};
