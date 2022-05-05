@@ -1,38 +1,37 @@
 export type UnbindFn = () => void;
 
-type AnyFunction = (...args: any[]) => any;
-
-type GetEventType<Target extends EventTarget, Type extends string> = Target extends unknown
-  ? `on${Type}` extends keyof Target
-    ? GetEventTypeFromListener<
-        // remove types that aren't assignable to `AnyFunction`
-        // so that we don't end up with union like `MouseEvent | Event`
-        Extract<Target[`on${Type}`], AnyFunction>
-      >
+type ExtractEventTypeFromHandler<MaybeFn extends unknown> = MaybeFn extends (
+  this: any,
+  event: infer MaybeEvent,
+) => any
+  ? MaybeEvent extends Event
+    ? MaybeEvent
     : Event
   : never;
 
-type GetEventTypeFromListener<T extends AnyFunction> = T extends (this: any, event: infer U) => any
-  ? U extends Event
-    ? U
-    : Event
+// Given an EventTarget and an EventName - return the event type (eg `MouseEvent`)
+// Rather than switching on every time of EventTarget and looking up the appropriate `EventMap`
+// We are being sneaky an pulling the type out of any `on${EventName}` property
+// This is surprisingly robust
+type GetEventType<
+  Target extends EventTarget,
+  EventName extends string,
+> = `on${EventName}` extends keyof Target
+  ? ExtractEventTypeFromHandler<Target[`on${EventName}`]>
   : Event;
 
-export type Binding<Target extends EventTarget = EventTarget, Type extends string = string> = {
-  type: Type;
-  listener: Listener<GetEventType<Target, Type>, Target>;
-  options?: boolean | AddEventListenerOptions;
+// For listener objects, the handleEvent function has the object as the `this` binding
+type ListenerObject<TEvent extends Event> = {
+  handleEvent(this: ListenerObject<TEvent>, e: TEvent): void;
 };
 
-export type Listener<Ev extends Event, Target extends EventTarget> =
-  | ListenerObject<Ev>
-  // For a listener function, the `this` binding is the target the event listener is added to
-  // using bivariance hack here so if the user
-  // wants to narrow event type by hand TS
-  // won't give them an error
-  | { bivarianceHack(this: Target, e: Ev): void }['bivarianceHack'];
+// event listeners can be an object or a function
+export type Listener<Target extends EventTarget, EventName extends string> =
+  | ListenerObject<GetEventType<Target, EventName>>
+  | { (this: Target, e: GetEventType<Target, EventName>): void };
 
-type ListenerObject<Ev extends Event> = {
-  // For listener objects, the handleEvent function has the object as the `this` binding
-  handleEvent(this: ListenerObject<Ev>, Ee: Ev): void;
+export type Binding<Target extends EventTarget = EventTarget, EventName extends string = string> = {
+  type: EventName;
+  listener: Listener<Target, EventName>;
+  options?: boolean | AddEventListenerOptions;
 };
