@@ -2,43 +2,35 @@ export type UnbindFn = () => void;
 
 type AnyFunction = (...args: any[]) => any;
 
-type GetEventType<Target extends EventTarget, Type extends string> = Target extends unknown
-  ? `on${Type}` extends keyof Target
-    ? GetEventTypeFromListener<
-        // remove types that aren't assignable to `AnyFunction`
-        // so that we don't end up with union like `MouseEvent | Event`
-        Extract<Target[`on${Type}`], AnyFunction>
-      >
-    : Event
+export type InferEventType<TTarget> = TTarget extends {
+  addEventListener(type: infer P, ...args: any): void;
+  addEventListener(type: infer P2, ...args: any): void;
+}
+  ? P
   : never;
 
-type GetEventTypeFromListener<T extends AnyFunction> = T extends (this: any, event: infer U) => any
-  ? U extends Event
-    ? U
-    : Event
-  : Event;
+export type InferEvent<TTarget, TType extends string> =
+  // we check if the inferred Type is the same as its defined constraint
+  // if it's the same then we've failed to infer concrete value
+  // it means that a string outside of the autocompletable values has been used
+  // we'll be able to drop this check when https://github.com/microsoft/TypeScript/pull/51770 gets released
+  InferEventType<TTarget> extends TType
+    ? Event
+    : `on${TType}` extends keyof TTarget
+    ? Parameters<Extract<TTarget[`on${TType}`], AnyFunction>>[0]
+    : Event;
 
-export type Binding<Target extends EventTarget = EventTarget, Type extends string = string> = {
-  type: Type;
-  listener: Listener<GetEventType<Target, Type>, Target>;
-  options?: boolean | AddEventListenerOptions;
-};
+export type Listener<TTarget extends EventTarget, TEvent extends Event> =
+  | { (this: TTarget, ev: TEvent): void }
+  | ListenerObject<TEvent>;
 
-export type Listener<Ev extends Event, Target extends EventTarget> =
-  | ListenerObject<Ev>
-  // For a listener function, the `this` binding is the target the event listener is added to
-  // using bivariance hack here so if the user
-  // wants to narrow event type by hand TS
-  // won't give them an error
-  | { bivarianceHack(this: Target, e: Ev): void }['bivarianceHack'];
-
-type ListenerObject<Ev extends Event> = {
+interface ListenerObject<TEvent extends Event> {
   // For listener objects, the handleEvent function has the object as the `this` binding
-  handleEvent(this: ListenerObject<Ev>, Ee: Ev): void;
-};
+  handleEvent(this: ListenerObject<TEvent>, event: TEvent): void;
+}
 
-export type PossibleEventType<K> = K extends any
-  ? K extends `on${infer Type}`
-    ? Type
-    : never
-  : never;
+export interface Binding<TTarget extends EventTarget, TType extends string> {
+  type: TType;
+  listener: Listener<TTarget, InferEvent<TTarget, TType>>;
+  options?: boolean | AddEventListenerOptions;
+}
