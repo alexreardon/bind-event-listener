@@ -13,7 +13,7 @@ export type InferEvent<TTarget, TType extends string> =
   // we check if the inferred Type is the same as its defined constraint
   // if it's the same then we've failed to infer concrete value
   // it means that a string outside of the autocompletable values has been used
-  // we'll be able to drop this check when https://github.com/microsoft/TypeScript/pull/51770 gets released
+  // we'll be able to drop this check when https://github.com/microsoft/TypeScript/pull/51770 gets released in TS 5.0
   InferEventType<TTarget> extends TType
     ? Event
     : `on${TType}` extends keyof TTarget
