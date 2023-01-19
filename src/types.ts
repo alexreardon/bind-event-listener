@@ -29,8 +29,8 @@ interface ListenerObject<TEvent extends Event> {
   handleEvent(this: ListenerObject<TEvent>, event: TEvent): void;
 }
 
-export interface Binding<TTarget extends EventTarget = EventTarget, TType extends string = string> {
+export type Binding<TTarget extends EventTarget = EventTarget, TType extends string = string> = {
   type: TType;
   listener: Listener<TTarget, InferEvent<TTarget, TType>>;
   options?: boolean | AddEventListenerOptions;
-}
+};
