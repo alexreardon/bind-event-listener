@@ -20,14 +20,15 @@ export type InferEvent<TTarget, TType extends string> =
     ? Parameters<Extract<TTarget[`on${TType}`], AnyFunction>>[0]
     : Event;
 
-export type Listener<TTarget extends EventTarget, TEvent extends Event> =
-  | { (this: TTarget, ev: TEvent): void }
-  | ListenerObject<TEvent>;
-
-interface ListenerObject<TEvent extends Event> {
-  // For listener objects, the handleEvent function has the object as the `this` binding
+// For listener objects, the handleEvent function has the object as the `this` binding
+type ListenerObject<TEvent extends Event> = {
   handleEvent(this: ListenerObject<TEvent>, event: TEvent): void;
-}
+};
+
+// event listeners can be an object or a function
+export type Listener<TTarget extends EventTarget, TEvent extends Event> =
+  | ListenerObject<TEvent>
+  | { (this: TTarget, ev: TEvent): void };
 
 export type Binding<TTarget extends EventTarget = EventTarget, TType extends string = string> = {
   type: TType;
