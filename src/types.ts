@@ -1,9 +1,14 @@
 export type UnbindFn = () => void;
 
-type AnyFunction = (...args: any[]) => any;
+type UnknownFunction = (...args: any[]) => any;
 
 export type InferEventType<TTarget> = TTarget extends {
+  // we infer from 2 overloads which are super common for event targets in the DOM lib
+  // we "prioritize" the first one as the first one is always more specific
   addEventListener(type: infer P, ...args: any): void;
+  // we can ignore the second one as it's usually just a fallback that allows bare `string` here
+  // we use `infer P2` over `any` as we really don't care about this type value
+  // and we don't want to accidentally fail a type assignability check, remember that `any` isn't assignable to `never`
   addEventListener(type: infer P2, ...args: any): void;
 }
   ? P
@@ -17,7 +22,7 @@ export type InferEvent<TTarget, TType extends string> =
   InferEventType<TTarget> extends TType
     ? Event
     : `on${TType}` extends keyof TTarget
-    ? Parameters<Extract<TTarget[`on${TType}`], AnyFunction>>[0]
+    ? Parameters<Extract<TTarget[`on${TType}`], UnknownFunction>>[0]
     : Event;
 
 // For listener objects, the handleEvent function has the object as the `this` binding
