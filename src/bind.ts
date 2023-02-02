@@ -1,6 +1,9 @@
 import { UnbindFn, InferEventType, InferEvent, Listener } from './types';
 
-export function bind<TTarget extends EventTarget, TType extends InferEventType<TTarget> & string>(
+export function bind<
+  TTarget extends EventTarget,
+  TType extends InferEventType<TTarget> | (string & {}),
+>(
   target: TTarget,
   // binding: Binding<
   //   TTarget,
@@ -18,10 +21,7 @@ export function bind<TTarget extends EventTarget, TType extends InferEventType<T
     listener,
     options,
   }: {
-    // `| (string & {})` should be moved to the Type's constraint
-    // however, doing that today breaks autocompletion
-    // this is being fixed by https://github.com/microsoft/TypeScript/pull/51770 but we need wait for its release in TS 5.0
-    type: TType | (string & {});
+    type: TType;
     listener: Listener<TTarget, InferEvent<TTarget, TType>>;
     options?: boolean | AddEventListenerOptions;
   },
