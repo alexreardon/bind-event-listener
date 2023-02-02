@@ -1,6 +1,6 @@
 import { expectTypeOf } from 'expect-type';
 import { Binding, Listener } from '../../src';
-import { expectType, TypeOf } from 'ts-expect';
+import { expectTypeOf } from 'expect-type';
 
 // extracting event type
 {

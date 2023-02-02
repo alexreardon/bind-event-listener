@@ -50,7 +50,7 @@ declare global {
     options?: boolean | AddEventListenerOptions;
   }>();
 
-  type ClickListener = Listener<Window, 'click'>;
+  type ClickListener = Listener<Window, MouseEvent>;
 
   // `this` and `event` are set correctly
   expectType<TypeOf<ClickListener, (this: Window, e: MouseEvent) => void>>(true);
