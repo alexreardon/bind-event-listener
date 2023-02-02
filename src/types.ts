@@ -1,37 +1,42 @@
 export type UnbindFn = () => void;
 
-type ExtractEventTypeFromHandler<MaybeFn extends unknown> = MaybeFn extends (
-  this: any,
-  event: infer MaybeEvent,
-) => any
-  ? MaybeEvent extends Event
-    ? MaybeEvent
-    : Event
+type UnknownFunction = (...args: any[]) => any;
+
+export type InferEventType<TTarget> = TTarget extends {
+  // we infer from 2 overloads which are super common for event targets in the DOM lib
+  // we "prioritize" the first one as the first one is always more specific
+  addEventListener(type: infer P, ...args: any): void;
+  // we can ignore the second one as it's usually just a fallback that allows bare `string` here
+  // we use `infer P2` over `any` as we really don't care about this type value
+  // and we don't want to accidentally fail a type assignability check, remember that `any` isn't assignable to `never`
+  addEventListener(type: infer P2, ...args: any): void;
+}
+  ? P
   : never;
 
-// Given an EventTarget and an EventName - return the event type (eg `MouseEvent`)
-// Rather than switching on every time of EventTarget and looking up the appropriate `EventMap`
-// We are being sneaky an pulling the type out of any `on${EventName}` property
-// This is surprisingly robust
-type GetEventType<
-  Target extends EventTarget,
-  EventName extends string,
-> = `on${EventName}` extends keyof Target
-  ? ExtractEventTypeFromHandler<Target[`on${EventName}`]>
-  : Event;
+export type InferEvent<TTarget, TType extends string> =
+  // we check if the inferred Type is the same as its defined constraint
+  // if it's the same then we've failed to infer concrete value
+  // it means that a string outside of the autocompletable values has been used
+  // we'll be able to drop this check when https://github.com/microsoft/TypeScript/pull/51770 gets released in TS 5.0
+  InferEventType<TTarget> extends TType
+    ? Event
+    : `on${TType}` extends keyof TTarget
+    ? Parameters<Extract<TTarget[`on${TType}`], UnknownFunction>>[0]
+    : Event;
 
 // For listener objects, the handleEvent function has the object as the `this` binding
 type ListenerObject<TEvent extends Event> = {
-  handleEvent(this: ListenerObject<TEvent>, e: TEvent): void;
+  handleEvent(this: ListenerObject<TEvent>, event: TEvent): void;
 };
 
 // event listeners can be an object or a function
-export type Listener<Target extends EventTarget, EventName extends string> =
-  | ListenerObject<GetEventType<Target, EventName>>
-  | { (this: Target, e: GetEventType<Target, EventName>): void };
+export type Listener<TTarget extends EventTarget, TEvent extends Event> =
+  | ListenerObject<TEvent>
+  | { (this: TTarget, ev: TEvent): void };
 
-export type Binding<Target extends EventTarget = EventTarget, EventName extends string = string> = {
-  type: EventName;
-  listener: Listener<Target, EventName>;
+export type Binding<TTarget extends EventTarget = EventTarget, TType extends string = string> = {
+  type: TType;
+  listener: Listener<TTarget, InferEvent<TTarget, TType>>;
   options?: boolean | AddEventListenerOptions;
 };
