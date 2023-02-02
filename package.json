@@ -32,13 +32,14 @@
     }
   ],
   "scripts": {
-    "typescript:check": "yarn tsc --noEmit",
+    "typescript:check": "tsc --noEmit",
     "typescript:watch": "tsc --watch",
     "typescript:build": "tsc",
+    "typescript:test": "tsc ./test/type-tests/** --noEmit",
     "prettier:check": "prettier --debug-check $npm_package_config_prettier_target",
     "prettier:write": "prettier --write $npm_package_config_prettier_target",
-    "validate": "yarn typescript:check && yarn prettier:check",
-    "test": "yarn jest",
+    "validate": "yarn typescript:check && yarn typescript:test && yarn prettier:check",
+    "test": "tsc ./test/type-tests/** --noEmit",
     "size:check": "size-limit",
     "build:clean": "rimraf dist",
     "build": "yarn build:clean && yarn typescript:build",
@@ -47,7 +48,7 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "^7.0.5",
     "@types/jest": "^27.4.0",
-    "expect-type": "^0.13.0",
+    "expect-type": "^0.15.0",
     "jest": "^27.4.7",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",

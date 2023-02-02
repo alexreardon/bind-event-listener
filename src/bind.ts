@@ -22,7 +22,7 @@ export function bind<TTarget extends EventTarget, TType extends InferEventType<T
     // however, doing that today breaks autocompletion
     // this is being fixed by https://github.com/microsoft/TypeScript/pull/51770 but we need wait for its release in TS 5.0
     type: TType | (string & {});
-    listener: Listener<TTarget, InferEvent<TTarget, TType>>;
+    listener: Listener<TTarget, TType>;
     options?: boolean | AddEventListenerOptions;
   },
 ): UnbindFn {

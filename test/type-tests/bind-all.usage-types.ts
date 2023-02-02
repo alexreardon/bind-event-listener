@@ -1,3 +1,4 @@
+import { expectTypeOf } from 'expect-type';
 import { bindAll } from '../../src';
 
 // inline definitions
@@ -23,14 +24,14 @@ import { bindAll } from '../../src';
   bindAll(button, [
     {
       type: 'click',
-      listener(event: MouseEvent) {
-        const value: number = event.button;
+      listener(event) {
+        expectTypeOf(event).toEqualTypeOf<MouseEvent>();
       },
     },
     {
       type: 'keydown',
-      listener(event: KeyboardEvent) {
-        const value: string = event.key;
+      listener(event) {
+        expectTypeOf(event).toEqualTypeOf<KeyboardEvent>();
       },
     },
   ]);

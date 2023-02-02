@@ -1,4 +1,5 @@
 import { bind } from '../../src';
+import { expectTypeOf } from 'expect-type';
 
 // inline definitions
 {
@@ -10,6 +11,30 @@ import { bind } from '../../src';
   });
 }
 
+// inline definitions (inferred)
+{
+  const button: HTMLElement = document.createElement('button');
+
+  bind(button, {
+    type: 'keydown',
+    listener(event) {
+      expectTypeOf(event).toEqualTypeOf<KeyboardEvent>();
+    },
+  });
+}
+
+// inline definitions (inferred + no concrete event type)
+{
+  const button: HTMLElement = document.createElement('button');
+
+  bind(button, {
+    type: 'hello',
+    listener(event) {
+      expectTypeOf(event).toEqualTypeOf<Event>();
+    },
+  });
+}
+
 // inferred types
 {
   const button: HTMLElement = document.createElement('button');
@@ -17,7 +42,7 @@ import { bind } from '../../src';
   bind(button, {
     type: 'click',
     listener(event) {
-      const value: number = event.button;
+      expectTypeOf(event).toEqualTypeOf<MouseEvent>();
     },
   });
 }
