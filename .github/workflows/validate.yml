@@ -16,9 +16,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version-file: '.nvmrc'
+          # Using node action to manage caching node_modules
+          cache: 'yarn'
 
       - name: Restore dependency cache
         uses: actions/cache@v2
