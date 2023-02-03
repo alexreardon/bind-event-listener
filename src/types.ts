@@ -11,19 +11,12 @@ export type InferEventType<TTarget> = TTarget extends {
   // and we don't want to accidentally fail a type assignability check, remember that `any` isn't assignable to `never`
   addEventListener(type: infer P2, ...args: any): void;
 }
-  ? P
+  ? P & string
   : never;
 
-export type InferEvent<TTarget, TType extends string> =
-  // we check if the inferred Type is the same as its defined constraint
-  // if it's the same then we've failed to infer concrete value
-  // it means that a string outside of the autocompletable values has been used
-  // we'll be able to drop this check when https://github.com/microsoft/TypeScript/pull/51770 gets released in TS 5.0
-  InferEventType<TTarget> extends TType
-    ? Event
-    : `on${TType}` extends keyof TTarget
-    ? Parameters<Extract<TTarget[`on${TType}`], UnknownFunction>>[0]
-    : Event;
+export type InferEvent<TTarget, TType extends string> = `on${TType}` extends keyof TTarget
+  ? Parameters<Extract<TTarget[`on${TType}`], UnknownFunction>>[0]
+  : Event;
 
 // For listener objects, the handleEvent function has the object as the `this` binding
 type ListenerObject<TEvent extends Event> = {

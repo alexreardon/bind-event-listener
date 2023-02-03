@@ -23,13 +23,13 @@ import { bindAll } from '../../src';
   bindAll(button, [
     {
       type: 'click',
-      listener(event: MouseEvent) {
+      listener(event) {
         const value: number = event.button;
       },
     },
     {
       type: 'keydown',
-      listener(event: KeyboardEvent) {
+      listener(event) {
         const value: string = event.key;
       },
     },

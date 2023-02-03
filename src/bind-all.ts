@@ -37,13 +37,13 @@ function getBinding(original: Binding, sharedOptions?: boolean | AddEventListene
 
 export function bindAll<
   TTarget extends EventTarget,
-  TTypes extends ReadonlyArray<InferEventType<TTarget> & string>,
+  TTypes extends ReadonlyArray<InferEventType<TTarget> | (string & {})>,
 >(
   target: TTarget,
   bindings: [
     ...{
       [K in keyof TTypes]: {
-        type: TTypes[K] | (string & {});
+        type: TTypes[K];
         listener: Listener<
           TTarget,
           InferEvent<
