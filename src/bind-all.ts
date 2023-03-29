@@ -48,6 +48,7 @@ export function bindAll<
       // we use `TTypes[K] & string` instead to workaround this issue and it works fine
       // but using `Binding<TTarget, TTypes[K] & string>` is not an option
       // as we need to keep `TTypes[K]` "naked" at the `type` property, for it to be a valid inference candidate
+      // without that we'd lose the autocompletes for the `type` property
       [K in keyof TTypes]: {
         type: TTypes[K];
         listener: Listener<TTarget, TTypes[K] & string>;
