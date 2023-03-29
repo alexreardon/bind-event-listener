@@ -1,4 +1,4 @@
-import { Binding, InferEventType, Listener, UnbindFn } from './types';
+import { Binding, InferEventType, UnbindFn } from './types';
 import { bind } from './bind';
 
 function toOptions(value?: boolean | AddEventListenerOptions): AddEventListenerOptions | undefined {
@@ -42,11 +42,7 @@ export function bindAll<
   target: TTarget,
   bindings: [
     ...{
-      [K in keyof TTypes]: {
-        type: TTypes[K];
-        listener: Listener<TTarget, TTypes[K] & string>;
-        options?: boolean | AddEventListenerOptions;
-      };
+      [K in keyof TTypes]: Binding<TTarget, TTypes[K]>;
     }
   ],
   sharedOptions?: boolean | AddEventListenerOptions,
