@@ -1,4 +1,4 @@
-import { Binding, InferEventType, UnbindFn } from './types';
+import { Binding, InferEventType, Listener, UnbindFn } from './types';
 import { bind } from './bind';
 
 function toOptions(value?: boolean | AddEventListenerOptions): AddEventListenerOptions | undefined {
@@ -42,7 +42,17 @@ export function bindAll<
   target: TTarget,
   bindings: [
     ...{
-      [K in keyof TTypes]: Binding<TTarget, TTypes[K]>;
+      // it could be simplified to `[K in keyof TTypes]: Binding<TTarget, TTypes[K]>;`
+      // however, TS@<4.7 has problems with recognizing `TTypes[K]` to have `string` constraint
+      // and that is required by `Binding`'s second type parameter
+      // we use `TTypes[K] & string` instead to workaround this issue and it works fine
+      // but using `Binding<TTarget, TTypes[K] & string>` is not an option
+      // as we need to keep `TTypes[K]` "naked" at the `type` property, for it to be a valid inference candidate
+      [K in keyof TTypes]: {
+        type: TTypes[K];
+        listener: Listener<TTarget, TTypes[K] & string>;
+        options?: boolean | AddEventListenerOptions;
+      };
     }
   ],
   sharedOptions?: boolean | AddEventListenerOptions,
