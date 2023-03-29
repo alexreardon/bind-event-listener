@@ -1,4 +1,4 @@
-import { UnbindFn, InferEventType, InferEvent, Listener } from './types';
+import { UnbindFn, InferEventType, Listener } from './types';
 
 export function bind<
   TTarget extends EventTarget,
@@ -14,7 +14,7 @@ export function bind<
     options,
   }: {
     type: TType;
-    listener: Listener<TTarget, InferEvent<TTarget, TType>>;
+    listener: Listener<TTarget, TType>;
     options?: boolean | AddEventListenerOptions;
   },
 ): UnbindFn {

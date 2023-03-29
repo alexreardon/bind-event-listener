@@ -1,4 +1,4 @@
-import { Binding, InferEvent, InferEventType, Listener, UnbindFn } from './types';
+import { Binding, InferEventType, Listener, UnbindFn } from './types';
 import { bind } from './bind';
 
 function toOptions(value?: boolean | AddEventListenerOptions): AddEventListenerOptions | undefined {
@@ -44,14 +44,7 @@ export function bindAll<
     ...{
       [K in keyof TTypes]: {
         type: TTypes[K];
-        listener: Listener<
-          TTarget,
-          InferEvent<
-            TTarget,
-            // `& string` "cast" is not needed since TS 4.7 (but the repo is using TS 4.6 atm)
-            TTypes[K] & string
-          >
-        >;
+        listener: Listener<TTarget, TTypes[K] & string>;
         options?: boolean | AddEventListenerOptions;
       };
     }
