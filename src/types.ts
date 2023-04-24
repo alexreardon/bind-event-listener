@@ -14,7 +14,7 @@ export type InferEventType<TTarget> = TTarget extends {
   ? P & string
   : never;
 
-export type InferEvent<TTarget, TType extends string> = `on${TType}` extends keyof TTarget
+type InferEvent<TTarget, TType extends string> = `on${TType}` extends keyof TTarget
   ? Parameters<Extract<TTarget[`on${TType}`], UnknownFunction>>[0]
   : Event;
 
@@ -24,12 +24,12 @@ type ListenerObject<TEvent extends Event> = {
 };
 
 // event listeners can be an object or a function
-export type Listener<TTarget extends EventTarget, TEvent extends Event> =
-  | ListenerObject<TEvent>
-  | { (this: TTarget, ev: TEvent): void };
+export type Listener<TTarget extends EventTarget, TType extends string> =
+  | ListenerObject<InferEvent<TTarget, TType>>
+  | { (this: TTarget, ev: InferEvent<TTarget, TType>): void };
 
 export type Binding<TTarget extends EventTarget = EventTarget, TType extends string = string> = {
   type: TType;
-  listener: Listener<TTarget, InferEvent<TTarget, TType>>;
+  listener: Listener<TTarget, TType>;
   options?: boolean | AddEventListenerOptions;
 };
