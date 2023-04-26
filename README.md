@@ -4,8 +4,7 @@
 ![types](https://img.shields.io/badge/types-typescript-blueviolet)
 [![minzip](https://img.shields.io/bundlephobia/minzip/bind-event-listener.svg)](https://www.npmjs.com/package/bind-event-listener)
 
-> A utility to make binding and (**especially**) unbinding DOM events easier.
-> I seem to write this again with every new project, so I made it a library
+A well typed utility to make creating and removing DOM event listeners safer and more ergonomic.
 
 ```ts
 import { bind, UnbindFn } from 'bind-event-listener';
@@ -215,9 +214,10 @@ const merged: AddEventListenerOptions = {
 
 ## Types
 
-Thanks to the great work by [@Ayub-Begimkulov](https://github.com/Ayub-Begimkulov) `bind-event-listener` has fantastic TypeScript types
+Thanks to the great work by [@Ayub-Begimkulov](https://github.com/Ayub-Begimkulov) and [@Andarist](https://github.com/Andarist) `bind-event-listener` has fantastic TypeScript types and auto complete.
 
-> ⚠️ TypeScript 4.1+ is required
+> ⚠️ TypeScript 4.1+ is required for types
+> ⚠️ TypeScript 5.0+ is required for event name autocompletion
 
 ```ts
 import invariant from 'tiny-invariant';
@@ -255,6 +255,82 @@ bind(button, {
 });
 ```
 
+`bind` and `bindAll` accept type arguments (generics), but it is generally best to let these be inferred
+
+```ts
+// with explicit type arguments
+bind<HTMLElement, 'click'>(button, {
+  type: 'click',
+  listener: function onClick() {},
+});
+
+// ✨ types will automatically be inferred for you ✨
+bind(button, {
+  type: 'click',
+  listener: function onClick() {},
+});
+
+// with explicit type arguments
+bindAll<HTMLElement, ['click', 'keydown']>(button, [
+  {
+    type: 'click',
+    listener: function onClick() {},
+  },
+  {
+    type: 'keydown',
+    listener: function onKeyDown() {},
+  },
+]);
+
+// ✨ types will automatically be inferred for you ✨
+bindAll(button, [
+  {
+    type: 'click',
+    listener: function onClick() {},
+  },
+  {
+    type: 'keydown',
+    listener: function onKeyDown() {},
+  },
+]);
+```
+
+> Typescript built in DOM types: [raw view](https://raw.githubusercontent.com/microsoft/TypeScript/master/lib/lib.dom.d.ts), [pretty view](https://github.com/microsoft/TypeScript/blob/master/lib/lib.dom.d.ts) (warning: pretty view seems to crash Github!)
+
+### Type helpers
+
+```ts
+import { Binding, Listener, UnbindFn } from 'bind-event-listener';
+```
+
+`Listener`: the `function` or `object` that you provide to the `listener` property of a `Binding`
+
+```ts
+bind(button, {
+  type: 'click',
+  listener: function onClick() {}, // ← `Listener`
+});
+```
+
+`Binding`: the definition of an event binding.
+
+```ts
+bind(
+  button,
+  // ↓ `Binding`
+  {
+    type: 'click',
+    listener: function onClick() {},
+  },
+);
+```
+
+`UnbindFn`: a named type for `() => void` to make it clearer that the function will unbind the added event listener(s):
+
+```ts
+const unbind: UnbindFn = bind(button, { type: 'click', listener: function onClick() {} });
+```
+
 ## Recipe: [`react`](https://reactjs.org/) effect
 
 You can return a [cleanup function](https://reactjs.org/docs/hooks-reference.html#cleaning-up-an-effect) from [`useEffect`](https://reactjs.org/docs/hooks-reference.html#useeffect) (or [`useLayoutEffect`](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)). `bind-event-listener` makes this super convenient because you can just return the unbind function from your effect.
@@ -280,30 +356,6 @@ export default function App() {
 ```
 
 > You can play with this [example on codesandbox](https://codesandbox.io/s/bind-event-listener-useeffect-mnfi3)
-
-## Types
-
-```ts
-function bind(target: EventTarget, binding: Binding): UnbindFn;
-
-function bindAll(
-  target: EventTarget,
-  bindings: Binding[],
-  // AddEventListenerOptions is a built in TypeScript type
-  sharedOptions?: boolean | AddEventListenerOptions,
-): UnbindFn;
-
-type Binding = {
-  type: string;
-  // EventListenerOrEventListenerObject is a built in TypeScript type
-  listener: EventListenerOrEventListenerObject;
-  options?: boolean | AddEventListenerOptions;
-};
-
-type UnbindFn = () => void;
-```
-
-> Typescript built in DOM types: [raw view](https://raw.githubusercontent.com/microsoft/TypeScript/master/lib/lib.dom.d.ts), [pretty view](https://github.com/microsoft/TypeScript/blob/master/lib/lib.dom.d.ts) (warning: pretty view seems to crash Github!)
 
 ## Cheers 👋
 
