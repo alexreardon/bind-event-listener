@@ -46,3 +46,35 @@ import { bind } from '../../src';
     listener: listener,
   });
 }
+
+// provided generics
+{
+  const button: HTMLElement = document.createElement('button');
+
+  bind<HTMLElement, 'click'>(button, {
+    type: 'click',
+    listener: function (event) {},
+  });
+}
+
+// incorrect event name
+{
+  const button: HTMLElement = document.createElement('button');
+
+  bind<HTMLElement, 'keydown'>(button, {
+    // @ts-expect-error - should be 'keydown'
+    type: 'click',
+    listener: function (event) {},
+  });
+}
+
+// incorrect target type
+{
+  const button: HTMLElement = document.createElement('button');
+
+  // @ts-expect-error - should be HTMLElement
+  bind<SVGElement, 'click'>(button, {
+    type: 'click',
+    listener: function (event) {},
+  });
+}
