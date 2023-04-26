@@ -74,7 +74,7 @@ it('should allow standard "this" manipulation (call)', () => {
 
   const object = {};
 
-  function otherFn(event: Event) {
+  function otherFn(this: unknown, event: Event) {
     expect(this).toBe(object);
   }
 
